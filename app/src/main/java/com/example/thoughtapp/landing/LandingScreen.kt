@@ -1,4 +1,4 @@
-package com.example.thoughtapp.ui
+package com.example.thoughtapp.landing
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
