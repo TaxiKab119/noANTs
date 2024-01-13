@@ -31,11 +31,25 @@ private val LightColorScheme = lightColorScheme(
 
 )
 
+private val DarkColorScheme = lightColorScheme(
+    primary = Color(0xFFF0D639),
+    secondary = Color(0xFF111111),
+
+    background = Color(0xFFF0D639),
+    surface = Color(0xFFF0D639),
+    onPrimary = Color(0xFF111111),
+    onSecondary = Color(0xFF111111),
+    onTertiary = Color(0xFF111111),
+    onBackground = Color(0xFF111111),
+    onSurface = Color(0xFF111111),
+
+    )
+
 @Composable
 fun ThoughtAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -44,7 +58,7 @@ fun ThoughtAppTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> LightColorScheme
+        darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
     val view = LocalView.current
