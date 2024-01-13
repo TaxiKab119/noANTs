@@ -20,10 +20,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,53 +34,44 @@ import com.example.thoughtapp.ui.theme.ThoughtAppTheme
 fun ThoughtTopAppBar(
     title: String,
     isAdd: Boolean = false,
+    modifier: Modifier = Modifier,
     onClose: () -> Unit = {}
 ) {
     TopAppBar(
-        title =  {
-            Column(
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.9f)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.9f)
-                ) {
-                    Text(
-                        text = title,
-                        style = TextStyle(
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Left
-                        ),
-                        modifier = Modifier.padding(start = 12.dp, end = 0.dp)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    if (isAdd) {
-                        Button(
-                            onClick = onClose,
-                            modifier = Modifier.fillMaxHeight(0.9f)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = "Close",
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                            )
-                        }
+                Text(
+                    text = title,
+                    style = TextStyle(
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Left
+                    ),
+                    modifier = Modifier.padding(start = 12.dp, end = 0.dp)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                if (isAdd) {
+                    Button(
+                        onClick = onClose,
+                        modifier = Modifier.fillMaxHeight()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "Close",
+                            modifier = Modifier
+                                .fillMaxHeight()
+                        )
                     }
                 }
-                // Bottom border
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(4.dp)
-                        .background(Color.Black)
-                )
             }
-         },
+
+        },
+        modifier = modifier
     )
 }
 
