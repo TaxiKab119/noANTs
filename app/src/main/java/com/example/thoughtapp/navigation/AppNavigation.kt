@@ -1,17 +1,23 @@
 package com.example.thoughtapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.thoughtapp.AppViewModelProvider
 import com.example.thoughtapp.allthoughts.AllThoughtsScreen
 import com.example.thoughtapp.data.ThoughtRecord
 import com.example.thoughtapp.allthoughts.thoughtsList
 import com.example.thoughtapp.landing.LandingScreen
 import com.example.thoughtapp.recordthought.RecordThoughtScreen
+import com.example.thoughtapp.recordthought.RecordThoughtUiState
+import com.example.thoughtapp.recordthought.RecordThoughtViewModel
 import com.example.thoughtapp.ui.AboutScreen
 
 enum class Screen {
@@ -51,7 +57,10 @@ fun AppNavHost(
             AboutScreen(navController)
         }
         composable(NavigationItem.AddThought.route) {
-            RecordThoughtScreen(navController = navController, thoughtRecord = ThoughtRecord.default)
+            val viewModel: RecordThoughtViewModel = viewModel(
+                factory = AppViewModelProvider.recordThoughtViewModelFactory(0)
+            )
+            RecordThoughtScreen(navController = navController, thoughtRecord = ThoughtRecord.default, viewModel = viewModel)
         }
         composable(
             route = NavigationItem.ViewThought.route,
@@ -60,7 +69,12 @@ fun AppNavHost(
             })
             ) { backStackEntry ->
             val thoughtId: Int = backStackEntry.arguments?.getString("thoughtId")?.toInt() ?: 0
-            RecordThoughtScreen(navController = navController, thoughtRecord = thoughtsList[thoughtId - 1], isEnabled = false)
+            // Create ViewModel using the factory method
+            val viewModel: RecordThoughtViewModel = viewModel(
+                factory = AppViewModelProvider.recordThoughtViewModelFactory(thoughtId)
+            )
+            val uiState: RecordThoughtUiState by viewModel.uiState.collectAsState()
+            RecordThoughtScreen(navController = navController, thoughtRecord = uiState.thoughtRecord, viewModel = viewModel, isEnabled = false)
         }
     }
 }

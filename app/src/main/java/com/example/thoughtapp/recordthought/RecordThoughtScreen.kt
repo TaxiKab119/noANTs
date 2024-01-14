@@ -23,6 +23,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -55,8 +56,10 @@ import com.example.thoughtapp.ui.utils.ThoughtTopAppBar
 fun RecordThoughtScreen(
     thoughtRecord: ThoughtRecord,
     navController: NavController = rememberNavController(),
+    viewModel: RecordThoughtViewModel,
     isEnabled: Boolean = true,
 ) {
+    val uiState: RecordThoughtUiState by viewModel.uiState.collectAsState()
     Scaffold(
         topBar = {
             ThoughtTopAppBar(
@@ -66,7 +69,7 @@ fun RecordThoughtScreen(
                 navController.popBackStack()
             }
         }
-    ) {
+    ) { it ->
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.padding(it)
@@ -78,14 +81,18 @@ fun RecordThoughtScreen(
                     label = "what was the context leading up to the thought? who, what, where, when and why? (e.g., just got off the phone with my dad and was about to make dinner.)",
                     title = "situation",
                     isEnabled = isEnabled,
-                    initialText = thoughtRecord.situation
-                )
+                    text = uiState.thoughtRecord.situation
+                ) { situation ->
+                    viewModel.updateUiState(thoughtRecord = uiState.thoughtRecord.copy(situation = situation))
+                }
                 CustomTextField(
                     label = "what are you feeling? emotionally? physically? (e.g., angry, sad, butterflies in stomach)",
                     title = "emotion",
                     isEnabled = isEnabled,
-                    initialText = thoughtRecord.emotion
-                )
+                    text = uiState.thoughtRecord.emotion
+                ) { emotion ->
+                    viewModel.updateUiState(thoughtRecord = uiState.thoughtRecord.copy(emotion = emotion))
+                }
                 CustomSlider(
                     title = "strength of emotion",
                     initialSliderValue = thoughtRecord.emotionIntensity,
@@ -95,8 +102,10 @@ fun RecordThoughtScreen(
                     label = "what is going through your mind? (e.g., I feel like I am not good enough. Like an impostor.)",
                     title = "thought",
                     isEnabled = isEnabled,
-                    initialText = thoughtRecord.thought
-                )
+                    text = uiState.thoughtRecord.thought
+                ) { thought ->
+                    viewModel.updateUiState(thoughtRecord = uiState.thoughtRecord.copy(thought = thought))
+                }
                 CustomSlider(
                     title = "belief in thought",
                     initialSliderValue = thoughtRecord.thoughtBelief,
@@ -109,20 +118,26 @@ fun RecordThoughtScreen(
                     label = "give 1-3 reasons why this thought may be true",
                     title = "may be true because...",
                     isEnabled = isEnabled,
-                    initialText = thoughtRecord.trueBecause
-                )
+                    text = uiState.thoughtRecord.trueBecause
+                ) { truth ->
+                    viewModel.updateUiState(thoughtRecord = uiState.thoughtRecord.copy(trueBecause = truth))
+                }
                 CustomTextField(
                     label = "give 1-3 reasons why this thought may NOT be true",
                     title = "may not be true because...",
                     isEnabled = isEnabled,
-                    initialText = thoughtRecord.falseBecause
-                )
+                    text = uiState.thoughtRecord.falseBecause
+                ) { falsehood ->
+                    viewModel.updateUiState(thoughtRecord = uiState.thoughtRecord.copy(falseBecause = falsehood))
+                }
                 CustomTextField(
                     label = "given all the evidence, is there a better way of summing up the situation?",
                     title = "reconsider",
                     isEnabled = isEnabled,
-                    initialText = thoughtRecord.reconsider
-                )
+                    text = uiState.thoughtRecord.reconsider
+                ) { reconsider ->
+                    viewModel.updateUiState(thoughtRecord = uiState.thoughtRecord.copy(reconsider = reconsider))
+                }
                 CustomSlider(
                     title = "strength of belief in new thought",
                     isEnabled = isEnabled,
@@ -206,11 +221,10 @@ fun CustomSectionDivider(
 fun CustomTextField(
     label: String,
     title: String,
-    initialText: String = "",
-    isEnabled: Boolean = true
+    text: String,
+    isEnabled: Boolean = true,
+    onValueChange: (String) -> Unit
 ) {
-    var text by remember { mutableStateOf(initialText) }
-
     Column {
         Text(
             text = title,
@@ -222,7 +236,7 @@ fun CustomTextField(
         )
         TextField(
             value = text,
-            onValueChange = { newText -> text = newText },
+            onValueChange = { onValueChange(it) },
             modifier = Modifier
                 .padding(bottom = 16.dp, top = 8.dp, start = 16.dp, end = 16.dp)
                 .background(color = MaterialTheme.colorScheme.primary)
@@ -319,13 +333,5 @@ fun CustomSlider(
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AddThoughtsScreenPreview() {
-    ThoughtAppTheme {
-        RecordThoughtScreen(thoughtsList.first())
     }
 }
