@@ -290,13 +290,12 @@ fun CustomSlider(
     modifier: Modifier = Modifier,
     title: String,
     isEnabled: Boolean = true,
-    initialSliderValue: Int = 50,
+    initialSliderValue: Int,
     onValueChange: (Int) -> Unit = {}
 ) {
     Log.d("Check initial slider value", "$initialSliderValue")
     // Convert the initial value to a percentage (0f to 1f)
-    val initialSliderPosition = (initialSliderValue - 1) / 100f
-    var sliderPosition by remember { mutableFloatStateOf(initialSliderPosition) }
+    var sliderPosition = (initialSliderValue - 1) / 100f
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
