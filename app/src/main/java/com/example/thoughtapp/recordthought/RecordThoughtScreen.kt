@@ -1,4 +1,4 @@
-package com.example.thoughtapp.addthought
+package com.example.thoughtapp.recordthought
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -42,20 +42,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.thoughtapp.ui.theme.ThoughtAppTheme
 import com.example.thoughtapp.ui.utils.ThoughtTopAppBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddThoughtsScreen() {
+fun RecordThoughtScreen(
+    navController: NavController = rememberNavController()
+) {
     Scaffold(
         topBar = {
             ThoughtTopAppBar(
-                title = "add thought",
+                title = "add a thought",
                 isAdd = true,
             ) {
-                /*TODO - Implement Closing*/
+                navController.navigate("ALL_THOUGHTS")
             }
         }
     ) {
@@ -64,6 +68,8 @@ fun AddThoughtsScreen() {
             modifier = Modifier.padding(it)
         ) {
             item {
+                Spacer(Modifier.height(24.dp))
+                CustomSectionDivider(title = "record the automatic thought")
                 CustomTextField(
                     label = "what was the context leading up to the thought? who, what, where, when and why? (e.g., just got off the phone with my dad and was about to make dinner.)",
                     title = "situation"
@@ -96,7 +102,10 @@ fun AddThoughtsScreen() {
                 CustomSlider(title = "strength of belief in new thought")
                 Spacer(Modifier.height(12.dp))
                 TextButton(
-                    onClick = { /*TODO - onSaveClick*/ },
+                    onClick = {
+                        /*TODO - save to db, call something in viewModel */
+                        navController.navigate("ALL_THOUGHTS")
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
@@ -219,8 +228,10 @@ fun CustomSlider(
     modifier: Modifier = Modifier,
     title: String,
     onValueChange: (Int) -> Unit = {},
-    initialSliderPosition: Float = 0f
+    initialSliderValue: Int = 50
 ) {
+    // Convert the initial value to a percentage (0f to 1f)
+    val initialSliderPosition = (initialSliderValue - 1) / 100f
     var sliderPosition by remember { mutableFloatStateOf(initialSliderPosition) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -281,6 +292,6 @@ fun CustomSlider(
 @Composable
 fun AddThoughtsScreenPreview() {
     ThoughtAppTheme {
-        AddThoughtsScreen()
+        RecordThoughtScreen()
     }
 }

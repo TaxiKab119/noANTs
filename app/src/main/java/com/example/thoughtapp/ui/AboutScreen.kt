@@ -1,4 +1,4 @@
-package com.example.thoughtapp.landing
+package com.example.thoughtapp.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,42 +23,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.thoughtapp.ui.theme.ThoughtAppTheme
 import com.example.thoughtapp.ui.utils.BottomNavItem
 import com.example.thoughtapp.ui.utils.CustomBottomNavigation
 import com.example.thoughtapp.ui.utils.ThoughtTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LandingScreen(
+fun AboutScreen(
     navController: NavController = rememberNavController()
 ) {
-    var currentScreen by remember { mutableStateOf(BottomNavItem.Landing) }
+    var currentScreen by remember { mutableStateOf(BottomNavItem.About) }
     Scaffold(
         topBar = {
             ThoughtTopAppBar(
-                title = "stop negative thoughts",
+                title = "about",
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { /*TODO*/ },
-                shape = RectangleShape,
-                containerColor = MaterialTheme.colorScheme.primary,
-
-                ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "add",
-                    modifier = Modifier.size(48.dp)
-                )
-
-            }
         },
         bottomBar = {
             CustomBottomNavigation(
@@ -79,7 +62,7 @@ fun LandingScreen(
         ) {
             Text(
                 /*TODO - Change # to # recorded thoughts*/
-                text = "You have recorded 0 automatic negative thoughts.",
+                text = "What is CBT? What are automatic thoughts?",
                 style = TextStyle(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
@@ -88,13 +71,5 @@ fun LandingScreen(
                     .padding(horizontal = 24.dp)
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LandingScreenPreview() {
-    ThoughtAppTheme {
-        LandingScreen()
     }
 }
