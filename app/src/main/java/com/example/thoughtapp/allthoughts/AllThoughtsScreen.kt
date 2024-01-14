@@ -4,16 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,7 +38,6 @@ fun AllThoughtsScreen(
     thoughtsList: List<ThoughtRecord>,
     navController: NavController = rememberNavController(),
     onClickItem: (Int) -> Unit = {},
-    onClickEdit: (Int) -> Unit = {},
 ) {
     var currentScreen by remember { mutableStateOf(BottomNavItem.AllThoughts) }
     Scaffold(
@@ -73,14 +67,10 @@ fun AllThoughtsScreen(
             items(thoughtsList) { thought ->
                 ThoughtItem(
                     thoughtNumber = thought.id,
-                    thoughtDate = thought.date,
                     onClickItem = { thoughtId ->
                         onClickItem(thoughtId)
                     }
-                ) { thoughtId ->
-                    onClickEdit(thoughtId)
-                }
-
+                )
             }
         }
     }
@@ -89,10 +79,8 @@ fun AllThoughtsScreen(
 @Composable
 fun ThoughtItem(
     thoughtNumber: Int,
-    thoughtDate: String,
     modifier: Modifier = Modifier,
     onClickItem: (Int) -> Unit = {},
-    onClickEdit: (Int) -> Unit = {},
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -102,7 +90,7 @@ fun ThoughtItem(
             .padding(horizontal = 24.dp)
     ) {
         Text(
-            text = "thought number $thoughtNumber ($thoughtDate)",
+            text = "thought number $thoughtNumber",
             style = TextStyle(
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
@@ -111,12 +99,6 @@ fun ThoughtItem(
                 onClickItem(thoughtNumber)
             }
         )
-        Spacer(modifier = Modifier.weight(1f))
-        IconButton(
-            onClick = { onClickEdit(thoughtNumber) }
-        ) {
-            Icon(Icons.Rounded.Edit, contentDescription = "Edit")
-        }
     }
 }
 
@@ -132,7 +114,6 @@ fun AllThoughtsScreenPreview() {
 val thoughtsList = listOf<ThoughtRecord>(
     ThoughtRecord(
         id = 1,
-        date = "Jan 13th",
         emotion = "Sad",
         emotionIntensity = 4,
         thought = "I will never be good enough.",
@@ -141,7 +122,6 @@ val thoughtsList = listOf<ThoughtRecord>(
     ),
     ThoughtRecord(
         id = 2,
-        date = "Jan 13th",
         emotion = "Sad",
         emotionIntensity = 4,
         thought = "I will never be good enough.",
@@ -150,7 +130,6 @@ val thoughtsList = listOf<ThoughtRecord>(
     ),
     ThoughtRecord(
         id = 3,
-        date = "Jan 13th",
         emotion = "Sad",
         emotionIntensity = 4,
         thought = "I will never be good enough.",
@@ -159,7 +138,6 @@ val thoughtsList = listOf<ThoughtRecord>(
     ),
     ThoughtRecord(
         id = 4,
-        date = "Jan 13th",
         emotion = "Sad",
         emotionIntensity = 4,
         thought = "I will never be good enough.",
@@ -168,7 +146,6 @@ val thoughtsList = listOf<ThoughtRecord>(
     ),
     ThoughtRecord(
         id = 5,
-        date = "Jan 13th",
         emotion = "Sad",
         emotionIntensity = 4,
         thought = "I will never be good enough.",
