@@ -45,7 +45,7 @@ fun AppNavHost(
             LandingScreen(navController)
         }
         composable(NavigationItem.AllThoughts.route) {
-            AllThoughtsScreen(thoughtsList = thoughtsList, navController)
+            AllThoughtsScreen(navController)
         }
         composable(NavigationItem.About.route) {
             AboutScreen(navController)
