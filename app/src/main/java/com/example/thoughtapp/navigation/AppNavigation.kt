@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.thoughtapp.allthoughts.AllThoughtsScreen
-import com.example.thoughtapp.allthoughts.ThoughtRecord
+import com.example.thoughtapp.data.ThoughtRecord
 import com.example.thoughtapp.allthoughts.thoughtsList
 import com.example.thoughtapp.landing.LandingScreen
 import com.example.thoughtapp.recordthought.RecordThoughtScreen

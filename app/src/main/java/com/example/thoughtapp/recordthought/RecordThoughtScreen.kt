@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.thoughtapp.allthoughts.ThoughtRecord
+import com.example.thoughtapp.data.ThoughtRecord
 import com.example.thoughtapp.allthoughts.thoughtsList
 import com.example.thoughtapp.ui.theme.ThoughtAppTheme
 import com.example.thoughtapp.ui.utils.ThoughtTopAppBar
