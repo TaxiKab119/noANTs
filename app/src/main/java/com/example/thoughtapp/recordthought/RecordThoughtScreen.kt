@@ -1,4 +1,4 @@
-package com.example.thoughtapp.addthought
+package com.example.thoughtapp.recordthought
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -42,20 +42,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.thoughtapp.allthoughts.ThoughtRecord
+import com.example.thoughtapp.allthoughts.thoughtsList
 import com.example.thoughtapp.ui.theme.ThoughtAppTheme
 import com.example.thoughtapp.ui.utils.ThoughtTopAppBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddThoughtsScreen() {
+fun RecordThoughtScreen(
+    thoughtRecord: ThoughtRecord,
+    navController: NavController = rememberNavController(),
+    isEnabled: Boolean = true,
+) {
     Scaffold(
         topBar = {
             ThoughtTopAppBar(
-                title = "add thought",
+                title = "add a thought",
                 isAdd = true,
             ) {
-                /*TODO - Implement Closing*/
+                navController.popBackStack()
             }
         }
     ) {
@@ -64,39 +72,68 @@ fun AddThoughtsScreen() {
             modifier = Modifier.padding(it)
         ) {
             item {
+                Spacer(Modifier.height(24.dp))
+                CustomSectionDivider(title = "record the automatic thought")
                 CustomTextField(
                     label = "what was the context leading up to the thought? who, what, where, when and why? (e.g., just got off the phone with my dad and was about to make dinner.)",
-                    title = "situation"
+                    title = "situation",
+                    isEnabled = isEnabled,
+                    initialText = thoughtRecord.situation
                 )
                 CustomTextField(
                     label = "what are you feeling? emotionally? physically? (e.g., angry, sad, butterflies in stomach)",
-                    title = "emotion"
+                    title = "emotion",
+                    isEnabled = isEnabled,
+                    initialText = thoughtRecord.emotion
                 )
-                CustomSlider(title = "strength of emotion")
+                CustomSlider(
+                    title = "strength of emotion",
+                    initialSliderValue = thoughtRecord.emotionIntensity,
+                    isEnabled = isEnabled
+                )
                 CustomTextField(
                     label = "what is going through your mind? (e.g., I feel like I am not good enough. Like an impostor.)",
-                    title = "thought"
+                    title = "thought",
+                    isEnabled = isEnabled,
+                    initialText = thoughtRecord.thought
                 )
-                CustomSlider(title = "belief in thought")
+                CustomSlider(
+                    title = "belief in thought",
+                    initialSliderValue = thoughtRecord.thoughtBelief,
+                    isEnabled = isEnabled
+                )
                 Spacer(Modifier.height(48.dp))
                 CustomSectionDivider(title = "challenge the negative thought")
                 Spacer(Modifier.height(12.dp))
                 CustomTextField(
                     label = "give 1-3 reasons why this thought may be true",
-                    title = "may be true because..."
+                    title = "may be true because...",
+                    isEnabled = isEnabled,
+                    initialText = thoughtRecord.trueBecause
                 )
                 CustomTextField(
                     label = "give 1-3 reasons why this thought may NOT be true",
-                    title = "may not be true because..."
+                    title = "may not be true because...",
+                    isEnabled = isEnabled,
+                    initialText = thoughtRecord.falseBecause
                 )
                 CustomTextField(
                     label = "given all the evidence, is there a better way of summing up the situation?",
-                    title = "reconsider"
+                    title = "reconsider",
+                    isEnabled = isEnabled,
+                    initialText = thoughtRecord.reconsider
                 )
-                CustomSlider(title = "strength of belief in new thought")
+                CustomSlider(
+                    title = "strength of belief in new thought",
+                    isEnabled = isEnabled,
+                    initialSliderValue = thoughtRecord.reconsiderationBelief
+                )
                 Spacer(Modifier.height(12.dp))
                 TextButton(
-                    onClick = { /*TODO - onSaveClick*/ },
+                    onClick = {
+                        /*TODO - save to db, call something in viewModel */
+                        navController.popBackStack()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
@@ -189,15 +226,18 @@ fun CustomTextField(
             modifier = Modifier
                 .padding(bottom = 16.dp, top = 8.dp, start = 16.dp, end = 16.dp)
                 .background(color = MaterialTheme.colorScheme.primary)
+                .fillMaxWidth()
                 .border(color = MaterialTheme.colorScheme.secondary, width = 2.dp),
             label = {
-                Text(
-                    text = label,
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontWeight = FontWeight.Light
+                if (text == "") {
+                    Text(
+                        text = label,
+                        style = TextStyle(
+                            color = MaterialTheme.colorScheme.secondary,
+                            fontWeight = FontWeight.Light
+                        )
                     )
-                )
+                }
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Default,
@@ -218,9 +258,12 @@ fun CustomTextField(
 fun CustomSlider(
     modifier: Modifier = Modifier,
     title: String,
+    isEnabled: Boolean = true,
     onValueChange: (Int) -> Unit = {},
-    initialSliderPosition: Float = 0f
+    initialSliderValue: Int = 50
 ) {
+    // Convert the initial value to a percentage (0f to 1f)
+    val initialSliderPosition = (initialSliderValue - 1) / 100f
     var sliderPosition by remember { mutableFloatStateOf(initialSliderPosition) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -248,11 +291,13 @@ fun CustomSlider(
                     .fillMaxWidth()
                     .height(40.dp)
                     .pointerInput(Unit) {
-                        detectTapGestures { offset ->
-                            sliderPosition = offset.x / size.width
-                            val scaledValue =
-                                (sliderPosition * 100).toInt() + 1 // Scale to 1-100 range
-                            onValueChange(scaledValue)
+                        if (isEnabled) {
+                            detectTapGestures { offset ->
+                                sliderPosition = offset.x / size.width
+                                val scaledValue =
+                                    (sliderPosition * 100).toInt() + 1 // Scale to 1-100 range
+                                onValueChange(scaledValue)
+                            }
                         }
                     }
             ) {
@@ -281,6 +326,6 @@ fun CustomSlider(
 @Composable
 fun AddThoughtsScreenPreview() {
     ThoughtAppTheme {
-        AddThoughtsScreen()
+        RecordThoughtScreen(thoughtsList.first())
     }
 }
