@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,21 +25,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.thoughtapp.AppViewModelProvider
+import com.example.thoughtapp.data.ThoughtRecord
 import com.example.thoughtapp.ui.theme.ThoughtAppTheme
 import com.example.thoughtapp.ui.utils.BottomNavItem
 import com.example.thoughtapp.ui.utils.CustomBottomNavigation
 import com.example.thoughtapp.ui.utils.ThoughtTopAppBar
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllThoughtsScreen(
-    thoughtsList: List<ThoughtRecord>,
     navController: NavController = rememberNavController(),
-    onClickItem: (Int) -> Unit = {},
 ) {
+    val viewModel: AllThoughtsViewModel =
+        viewModel(factory = AppViewModelProvider.thoughtsViewModelFactory())
+    val uiState: AllThoughtsUiState by viewModel.uiState.collectAsState()
+
     var currentScreen by remember { mutableStateOf(BottomNavItem.AllThoughts) }
     Scaffold(
         topBar = {
@@ -64,7 +69,7 @@ fun AllThoughtsScreen(
             state = listState,
 
             ) {
-            items(thoughtsList) { thought ->
+            items(uiState.thoughtsList) { thought ->
                 ThoughtItem(
                     thoughtNumber = thought.id,
                     onClickItem = { thoughtId ->
@@ -107,7 +112,7 @@ fun ThoughtItem(
 @Composable
 fun AllThoughtsScreenPreview() {
     ThoughtAppTheme {
-        AllThoughtsScreen(thoughtsList = thoughtsList)
+        AllThoughtsScreen()
     }
 }
 
