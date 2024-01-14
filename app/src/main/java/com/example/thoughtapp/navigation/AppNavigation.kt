@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.thoughtapp.allthoughts.AllThoughtsScreen
 import com.example.thoughtapp.allthoughts.thoughtsList
 import com.example.thoughtapp.landing.LandingScreen
+import com.example.thoughtapp.recordthought.RecordThoughtScreen
 import com.example.thoughtapp.ui.AboutScreen
 
 enum class Screen {
@@ -45,6 +46,9 @@ fun AppNavHost(
         }
         composable(NavigationItem.About.route) {
             AboutScreen(navController)
+        }
+        composable(NavigationItem.AddThought.route) {
+            RecordThoughtScreen(navController)
         }
 
     }

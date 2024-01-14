@@ -59,7 +59,7 @@ fun RecordThoughtScreen(
                 title = "add a thought",
                 isAdd = true,
             ) {
-                navController.navigate("ALL_THOUGHTS")
+                navController.popBackStack()
             }
         }
     ) {
@@ -104,7 +104,7 @@ fun RecordThoughtScreen(
                 TextButton(
                     onClick = {
                         /*TODO - save to db, call something in viewModel */
-                        navController.navigate("ALL_THOUGHTS")
+                        navController.popBackStack()
                     },
                     modifier = Modifier
                         .fillMaxWidth()

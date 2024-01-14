@@ -47,7 +47,9 @@ fun LandingScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.navigate("record thought")
+                },
                 shape = RectangleShape,
                 containerColor = MaterialTheme.colorScheme.primary,
 
