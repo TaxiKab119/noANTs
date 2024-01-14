@@ -58,7 +58,7 @@ fun AllThoughtsScreen(
     ) {
         val listState = rememberLazyListState()
         LazyColumn(
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             contentPadding = it,
             state = listState,
@@ -68,7 +68,7 @@ fun AllThoughtsScreen(
                 ThoughtItem(
                     thoughtNumber = thought.id,
                     onClickItem = { thoughtId ->
-                        onClickItem(thoughtId)
+                        navController.navigate("view thought/${thoughtId}")
                     }
                 )
             }
@@ -93,7 +93,7 @@ fun ThoughtItem(
             text = "thought number $thoughtNumber",
             style = TextStyle(
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
+                fontSize = 28.sp,
             ),
             modifier = Modifier.clickable {
                 onClickItem(thoughtNumber)
@@ -115,10 +115,14 @@ val thoughtsList = listOf<ThoughtRecord>(
     ThoughtRecord(
         id = 1,
         emotion = "Sad",
-        emotionIntensity = 4,
+        emotionIntensity = 17,
         thought = "I will never be good enough.",
-        thoughtBelief = 3,
-        situation = "sitting coding on a saturday afternoon."
+        thoughtBelief = 96,
+        situation = "sitting coding on a saturday afternoon.",
+        falseBecause = "test",
+        trueBecause = "test",
+        reconsider = "test",
+        reconsiderationBelief = 50
     ),
     ThoughtRecord(
         id = 2,
@@ -126,7 +130,11 @@ val thoughtsList = listOf<ThoughtRecord>(
         emotionIntensity = 4,
         thought = "I will never be good enough.",
         thoughtBelief = 3,
-        situation = "sitting coding on a saturday afternoon."
+        situation = "sitting coding on a saturday afternoon.",
+        falseBecause = "test",
+        trueBecause = "test",
+        reconsider = "test",
+        reconsiderationBelief = 70
     ),
     ThoughtRecord(
         id = 3,
@@ -134,7 +142,11 @@ val thoughtsList = listOf<ThoughtRecord>(
         emotionIntensity = 4,
         thought = "I will never be good enough.",
         thoughtBelief = 3,
-        situation = "sitting coding on a saturday afternoon."
+        situation = "sitting coding on a saturday afternoon.",
+        falseBecause = "test",
+        trueBecause = "test",
+        reconsider = "test",
+        reconsiderationBelief = 35
     ),
     ThoughtRecord(
         id = 4,
@@ -142,7 +154,11 @@ val thoughtsList = listOf<ThoughtRecord>(
         emotionIntensity = 4,
         thought = "I will never be good enough.",
         thoughtBelief = 3,
-        situation = "sitting coding on a saturday afternoon."
+        situation = "sitting coding on a saturday afternoon.",
+        falseBecause = "test",
+        trueBecause = "test",
+        reconsider = "test",
+        reconsiderationBelief = 17
     ),
     ThoughtRecord(
         id = 5,
@@ -150,6 +166,10 @@ val thoughtsList = listOf<ThoughtRecord>(
         emotionIntensity = 4,
         thought = "I will never be good enough.",
         thoughtBelief = 3,
-        situation = "sitting coding on a saturday afternoon."
-    )
+        situation = "sitting coding on a saturday afternoon.",
+        falseBecause = "test",
+        trueBecause = "test",
+        reconsider = "test",
+        reconsiderationBelief = 100
+    ),
 )
