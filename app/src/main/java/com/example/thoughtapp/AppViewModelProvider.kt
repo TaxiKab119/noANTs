@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.thoughtapp.allthoughts.AllThoughtsViewModel
+import com.example.thoughtapp.landing.LandingViewModel
 import com.example.thoughtapp.recordthought.RecordThoughtViewModel
 
 object AppViewModelProvider {
@@ -21,6 +22,14 @@ object AppViewModelProvider {
         initializer {
             RecordThoughtViewModel(
                 thoughtId,
+                thoughtsApplication().container.thoughtRepository
+            )
+        }
+    }
+
+    fun landingThoughtViewModelFactory() = viewModelFactory {
+        initializer {
+            LandingViewModel (
                 thoughtsApplication().container.thoughtRepository
             )
         }

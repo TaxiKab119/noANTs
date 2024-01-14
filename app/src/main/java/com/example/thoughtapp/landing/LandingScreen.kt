@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,12 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.thoughtapp.ui.theme.ThoughtAppTheme
 import com.example.thoughtapp.ui.utils.BottomNavItem
 import com.example.thoughtapp.ui.utils.CustomBottomNavigation
 import com.example.thoughtapp.ui.utils.ThoughtTopAppBar
@@ -36,8 +35,10 @@ import com.example.thoughtapp.ui.utils.ThoughtTopAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LandingScreen(
-    navController: NavController = rememberNavController()
+    navController: NavController = rememberNavController(),
+    viewModel: LandingViewModel
 ) {
+    val count by viewModel.thoughtsCount.collectAsState()
     var currentScreen by remember { mutableStateOf(BottomNavItem.Landing) }
     Scaffold(
         topBar = {
@@ -81,7 +82,7 @@ fun LandingScreen(
         ) {
             Text(
                 /*TODO - Change # to # recorded thoughts*/
-                text = "You have recorded 0 automatic negative thoughts.",
+                text = "You have recorded $count total automatic negative thoughts.",
                 style = TextStyle(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
@@ -90,13 +91,5 @@ fun LandingScreen(
                     .padding(horizontal = 24.dp)
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LandingScreenPreview() {
-    ThoughtAppTheme {
-        LandingScreen()
     }
 }

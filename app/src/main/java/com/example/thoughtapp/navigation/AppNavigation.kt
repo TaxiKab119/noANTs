@@ -15,6 +15,7 @@ import com.example.thoughtapp.allthoughts.AllThoughtsScreen
 import com.example.thoughtapp.data.ThoughtRecord
 import com.example.thoughtapp.allthoughts.thoughtsList
 import com.example.thoughtapp.landing.LandingScreen
+import com.example.thoughtapp.landing.LandingViewModel
 import com.example.thoughtapp.recordthought.RecordThoughtScreen
 import com.example.thoughtapp.recordthought.RecordThoughtUiState
 import com.example.thoughtapp.recordthought.RecordThoughtViewModel
@@ -48,7 +49,10 @@ fun AppNavHost(
         startDestination = startDestination
     ) {
         composable(NavigationItem.Landing.route) {
-            LandingScreen(navController)
+            val viewModel: LandingViewModel = viewModel(
+                factory = AppViewModelProvider.landingThoughtViewModelFactory()
+            )
+            LandingScreen(navController, viewModel)
         }
         composable(NavigationItem.AllThoughts.route) {
             AllThoughtsScreen(navController)
@@ -60,7 +64,7 @@ fun AppNavHost(
             val viewModel: RecordThoughtViewModel = viewModel(
                 factory = AppViewModelProvider.recordThoughtViewModelFactory(0)
             )
-            RecordThoughtScreen(navController = navController, thoughtRecord = ThoughtRecord.default, viewModel = viewModel)
+            RecordThoughtScreen(navController = navController, viewModel = viewModel)
         }
         composable(
             route = NavigationItem.ViewThought.route,
@@ -69,12 +73,10 @@ fun AppNavHost(
             })
             ) { backStackEntry ->
             val thoughtId: Int = backStackEntry.arguments?.getString("thoughtId")?.toInt() ?: 0
-            // Create ViewModel using the factory method
             val viewModel: RecordThoughtViewModel = viewModel(
                 factory = AppViewModelProvider.recordThoughtViewModelFactory(thoughtId)
             )
-            val uiState: RecordThoughtUiState by viewModel.uiState.collectAsState()
-            RecordThoughtScreen(navController = navController, thoughtRecord = uiState.thoughtRecord, viewModel = viewModel, isEnabled = false)
+            RecordThoughtScreen(navController = navController, viewModel = viewModel, isEnabled = false)
         }
     }
 }
